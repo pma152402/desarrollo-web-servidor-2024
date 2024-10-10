@@ -3,236 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Números</title>
+
+    <!-- Mostrar errores en la web -->
+    <?php
+        error_reporting( E_ALL );
+        ini_set( "display_errors", 1 );    
+    ?>
+
 </head>
 <body>
+
     <?php
-    /* $numero = 2;
+    // Comprar números
 
+    $numero = 16134;
+
+    // Forma 1
     if($numero > 0) {
-        echo "<p>1 El numero $numero es mayor que cero</p>";
-    }
-
-    if($numero > 0) echo "<p>2 el numero $numero es mayor que cero</p>";
-
-    if($numero > 0):
-        echo "<p>3 el numero $numero es mayor que cero</p>";
-    endif; */
-    /////////////////////////////////
-    
-/* // forma 1
-    if($numero > 0) {
-        echo "<p>1 El numero $numero es mayor que cero</p>";
-    } else {
-        echo "<p>1 El numero $numero es menor que cero</p>";
-    }
-// forma 2
-    if($numero > 0) echo "<p>2 el numero $numero es mayor que cero</p>";
-    else echo "<p>2 El numero $numero es menor que cero</p>";
-
-// forma 3
-    if($numero > 0):
-        echo "<p>3 el numero $numero es mayor que cero</p>";
-    else:
-        echo "<p>3 El numero $numero es menor que cero</p>";
-    endif;
- */
-    $numero = 0;
-    // forma 1
-    if($numero > 0) {
-        echo "<p>1 El numero $numero es mayor que ceroooo</p>";
+        echo "<p>El número $numero es mayor que cero</p>";
     } elseif ($numero == 0) {
-        echo "<p>1 El numero $numero es igual que cerooooo</p>";
-    } elseif ($numero < 0) {
-        echo "<p>1 El numero es menor que ceroooooo";
+        echo "<p>El número $numero es cero</p>";
+    } else {
+        echo "<p>El número $numero es menor que cero</p>";
     }
 
-    // forma 2
-    if($numero > 0) echo "<p>2 el numero $numero es mayor que cero</p>";
-    elseif ($numero == 0) echo "<p>2 El numero $numero es igual que cero</p>";
-    else echo "<p>2 El numero $numero es menor que cero</p>";
+    // Forma 2
+    if ($numero > 0) echo "<p>El número $numero es mayor que cero</p>";
+    elseif ($numero == 0) echo "<p>El número $numero es cero</p>";
+    else echo "<p>El número $numero es menor que cero</p>";
 
-    // forma 3
+    // Forma 3
     if($numero > 0):
-        echo "<p>3 el numero $numero es mayor que cero</p>";
-    elseif($numero == 0):
-        echo "<p>3 el numero $numero es igual que cero</p>";
+        echo "<p>El número $numero es mayor que cero</p>";
+    elseif ($numero == 0):
+        echo "<p>El número $numero es cero</p>";
     else:
-        echo "<p>3 El numero $numero es menor que cero</p>";
+        echo "<p>El número $numero es menor que cero</p>";
     endif;
 
+    ?>
 
-    // IF para comprobar un rango de numeros, and o &&
+    <?php
+    // Rangos [-10,0),[0,10],(10,20]
 
-    $num = -7;
+    $num = -2;
 
+    // && o and para conjunción
+
+    // FORMA 1
     if ($num >= -10 and $num < 0) {
-        echo "<p>El numero $num esta en el rango [-10, 0)</p>";
-    } 
-    elseif($num >= 0 and $num <= 10) {
-        echo "<p>El numero $num esta en el rango [0, 10]</p>";
-    } 
-    elseif($num > 10 and $num <= 20) {
-        echo "<p>El numero $num esta en el rango (10, 20]</p>";
+        echo "<p>EL número $num está en el rango [-10,0)</p>";
+    } elseif ($num >= 0 && $num <= 10) {
+        echo "<p>EL número $num está en el rango [0,10]</p>";
+    } elseif ($num > 10 && $num <= 20) {
+        echo "<p>EL número $num está en el rango (10,20]</p>";
+    } else {
+        echo "<p>EL número $num está fuera del rango</p>";
     }
+
+    // FORMA 2
+    if ($num >= -10 and $num < 0) echo "<p>EL número $num está en el rango [-10,0)</p>";
+    elseif ($num >= 0 && $num <= 10) echo "<p>EL número $num está en el rango [0,10]</p>";
+    elseif ($num > 10 && $num <= 20) echo "<p>EL número $num está en el rango (10,20]</p>";
+    else echo "<p>EL número $num está fuera del rango</p>";
+
+
+    // FORMA 3
+    if ($num >= -10 and $num < 0):
+        echo "<p>EL número $num está en el rango [-10,0)</p>";
+    elseif ($num >= 0 && $num <= 10):
+        echo "<p>EL número $num está en el rango [0,10]</p>";
+    elseif ($num > 10 && $num <= 20):
+        echo "<p>EL número $num está en el rango (10,20]</p>";
+    else:
+        echo "<p>EL número $num está fuera del rango</p>";
+    endif;
+
     ?>
 
-    <h3>EJERCICIO 2</h3>
-    <p>CALCULAR EL FACTORIAL DE 6 CON WHILE</p>
-    <?php
-    $i = 6;
-    $aux = 1;
-
-    while ($i > 0):
-        $aux *= $i;
-        $i--;
-    endwhile;
-
-    echo("Factorial de 6 = $aux");
-    ?>
+    <?php 
     
+    $num_alea = rand(1,200); # [1,200]
+    $num_alea_decimal = rand(10,100)/10; // Numero aleatorio con decimales
 
-    <h3>EJERCICIO 3</h3>
-    <p> Sumar numeros pares hasta 20</p>
-    <?php
-    $suma = 0; 
-    $i = 1;  
-    while ($i <= 20): 
-        if ($i % 2 == 0): 
-            $suma += $i;  
-        endif; 
-        $i++; 
-    endwhile; 
-        echo "La suma de los números pares entre 1 y 20 es: $suma\n"; 
-    ?>
+    /* COMPROBAR DE TRES FORMAS DIFERENTES, CON LA ESTRUCTURA IF, SI EL NÚMERO ALEATORIO TIENE 1, 2 O 3 DÍGITOS */
 
-    <h3>EJERCICIO 4</h3>
-    <p> Calcular los multiplos de 3</p>
-    <?php
-    $i = 0; 
-    while ($i <= 9): 
-        $resultado = $i * 3; 
-        if ($resultado % 2 == 0): echo "$resultado es par\n"; 
-        else: echo "$resultado es impar\n"; 
-        endif; 
-        $i++; 
-    endwhile; 
-    ?>
+    $digitos = null;
 
-    <h3>EJERCICIO 5</h3>
-    <p> MOSTRAR EN UNA LISTA LOS NUMEROS MULTIPLOS DE 3 </p>
-    <ul>
-    <?php
-        $i = 1;
-        while($i <= 100):
-            if($i % 3 == 0):
-                echo "<li>$$i</li>";
-            endif;
-            $i++;
-        endwhile;
-    ?>
-    </ul>
-
-    <h1>Lista con FOR</h1>
-    <?php
-    echo "<ul>";
-    for($i = 1; $i <= 10; $i++){
-        echo "<li>$i</li>";
+    // FORMA 1
+    if ($num_alea > 0 && $num_alea < 10) {
+        $digitos = 1;
+    } elseif ($num_alea >= 10 and $num_alea < 100) {
+        $digitos = 2;
+    } else {
+        $digitos = 3;
     }
-    echo "</ul>";
+
+    // FORMA 2
+    if ($num_alea > 0 && $num_alea < 10) $digitos = 1;
+    elseif ($num_alea >= 10 and $num_alea < 100) $digitos = 2;
+    else $digitos = 3;
+
+    // FORMA 3
+    if ($num_alea > 0 && $num_alea < 10):
+        $digitos = 1; 
+    elseif ($num_alea >= 10 and $num_alea < 100):
+        $digitos = 2;
+    else:
+        $digitos = 3;
+    endif;
+
+    $digitos_texto = "dígitos.";
+    if ($digitos == 1) $digitos_texto = "dígito.";
+    echo "<p>El número $num_alea tiene $digitos $digitos_texto</p>";
+
+    /* VERSION CON MATCH */
+    $resultado = match (true) {
+        $num_alea >= 1 && $num_alea <= 9 => 1,
+        $num_alea >= 10 && $num_alea <= 99 => 2,
+        $num_alea >= 100 && $num_alea <= 999 => 3,
+        default => "ERROR"
+    };
+
+    $digitos_texto = "dígitos.";
+    if ($digitos == 1) $digitos_texto = "dígito.";
+    echo "<p>El número $num_alea tiene $digitos $digitos_texto</p>";
+
+    
+        
     ?>
 
-    <h1>Lista con FOR alternativa : endfor</h1>
     <?php
-    echo "<ul>";
-    for($i = 1; $i <= 10; $i++):
-        echo "<li>$i</li>";
-    endfor;
-    echo "</ul>";
-    ?>
 
-    <h1>Lista con FOR break CURSED</h1>
-    <?php
-    echo "<ul>";
-    for($i = 1; ; $i++){
-        if($i > 10) {
+    $n = rand(1,3);
+
+    /* FORMA 1 */
+    switch($n) {
+        case 1:
+            echo "El número es $n";
             break;
-        }
-        echo "<li>$i</li>";
+        case 2:
+            echo "El número es $n";
+            break;
+        default:
+            echo "El número es $n";
+            break;
     }
-    echo "</ul>";
-    ?>
 
-    <h1>EJERCICIO 6</h1>
-    <p>MUESTRA POR PANTALLA LOS 50 PRIMEROS NUMEROS PRIMOS</p>
-    <?php
-    /*  siempre entre 1 o si mismo dara 0, asiq lo contrario
-    4 % 2 = 2   4 NO ES PRIMO
-    4 % 3 = 1
+    /* FORMA 2 */
+    $resultado = match($n) {
+        1 => "El numero es 1",
+        2 => "El numero es 2",
+        3 => "El numero es 3"
+    };
 
-    5 % 2 = 1      5 SI ES PRIMO
-    5 % 3 = 2
-    5 % 4 = 1
+    echo "<h3>$resultado</h3>";
 
-    BUCLE DE 2 A N-1
-    $n = 7
-    DESDE 2 hasta n - 1
-        comprobar si 7 tiene divisores que den de resto 0,
-            si existe, devolvemos falso
-    */
-    echo "<ul>";
-    $n = 31;
-    $res = 0;
-    $primo = false;
-
-    for($i = 2; $i <= $n - 1; $i++) {
-        echo "<li>$$n % $i =";
-
-
-        if($n % $i == 0){
-            $res = $n % $i;
-            echo "$res El numero NO es primo";
-            $i = $n + 50; // Salimos del bucle
-        }
-        else {
-            $res = $n % $i;
-            echo "$res";
-            if ($n == $i){
-                echo "El numero es primo !!";
-            }
-        }
-        echo "</li>";
-    }
-    echo "</ul> ";
-    ?>
-
-    // resolucion
-    <h1>RESOLUCION</h1>
-    <?php
-    $numero = 2;
-    $numerosPrimos = 0;
-
-    echo "<ol>";
-    while($numerosPrimos < 50){
-
-        $esprimo = true;
-        for ($i = 2; $i < $numero; $i++){
-            if($numero % i == 0) {
-                // No es primo
-                $esPrimo = false;
-                break;
-            }
-        }
-        if($esPrimo) {
-            $numerosPrimos++;
-            echo "<li>$numero</li>";
-        }
-        $numero++;
-    }
-    echo "</ol>";
-
-    // N*N -> O(N²)
-  //   var_dump($esPrimo);
     ?>
 
 
