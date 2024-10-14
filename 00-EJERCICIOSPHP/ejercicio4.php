@@ -46,6 +46,8 @@
         $unidadOrigen = "";
         $unidadFinal = "";
 
+        $resultado = $inicial; // SI NO CONVERTIMOS A NADA, ES LA MISMA TEMP, nos ahorramos el ELSE
+
         // De CELSIUS
         if ($_POST["origen"] == "Celsius"){
             $unidadOrigen = "Celsius";
