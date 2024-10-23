@@ -70,6 +70,9 @@
             convertirTemperatura($temperatura, $inicial, $final);
         }
     }
+    // En otro fichero nuevo, poner todos los demas formularios, y
+    // hacerlo con funciones; hacerlo por lo menos con 4 formularios
+
     ?>
 
 </body>

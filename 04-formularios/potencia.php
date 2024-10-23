@@ -8,6 +8,8 @@
     <?php
     error_reporting(E_ALL);
     ini_set("display_errors", 1);
+
+    require('../05_Funciones/funPotencianew.php');
     ?>
 </head>
 <body>
@@ -38,25 +40,46 @@
     $mostrar = "Resultado = ";
     if($_SERVER["REQUEST_METHOD"] == "POST"){ 
 
-        $base = $_POST["base"];
-        $elevado = $_POST["elevado"];
-        $resultado = $base;
+        $tmp_base = $_POST["base"];     // tmp_  variable temporal
+        $tmp_exponente = $_POST["elevado"];
 
-        if($elevado == 0) {
-            $resultado = 1;
-        } elseif ($elevado == 1) {
-            $resultado = $base;
-        } else {
-            for($i = 1; $i < $elevado; $i++) {
-                $resultado *= $base;
+        // BASE
+        if ($tmp_base != ''){
+            if (is_numeric($tmp_base)){
+                $base = $tmp_base;
+            }
+            else {
+                echo "<p>La base debe ser un número</p>";
             }
         }
+        else {
+            echo "<p>La base es un campo obligatorio</p>";
+        }
 
-        $mostrar = "$mostrar" . "$resultado";
+        // EXPONENTE
+        if ($tmp_exponente != ''){
+            if (is_numeric($tmp_exponente)){
+                if ($tmp_exponente >= 0){
+                    $exponente = $tmp_exponente;
+                }
+                else {
+                    echo "<p>El exponente debe ser mayor o igual a 0</p>";
+                }
+            }
+            else {
+                echo "<p>El exponente debe ser un número</p>";
+            }
+        }
+        else {
+            echo "<p>El exponente es un campo obligatorio</p>";
+        }
 
-    }
-    echo "<br>";
-    echo $mostrar;
+        // OPERACION FINAL
+        if (isset($base) && isset($exponente)) {  // si existen estas variables
+            $resultado = calcularPotencia($base, $exponente);  // calculo la potencia
+            echo "<h3>El resultado es $resultado</h3>";
+        }
+    } 
     ?>
 </body>
 </html>

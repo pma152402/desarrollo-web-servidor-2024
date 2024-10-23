@@ -6,30 +6,30 @@
         
         $temperaturaFinal = $temperaturaInicial;
 
-        if($unidadInicial == "C") {
-            if($unidadFinal == "K") {
+        if($unidadInicial == "Celsius") {
+            if($unidadFinal == "Kelvin") {
                 $temperaturaFinal = $temperaturaInicial + 273.15;
             } 
-            elseif($unidadFinal == "F") {
+            elseif($unidadFinal == "Fahrenheit") {
                 $temperaturaFinal = ($temperaturaInicial * (9/5)) + 32;
             }
         } 
-        elseif($unidadInicial == "K") {
-            if($unidadFinal == "C") {
+        elseif($unidadInicial == "Kelvin") {
+            if($unidadFinal == "Celsius") {
     
             } 
-            elseif($unidadFinal == "F") {
+            elseif($unidadFinal == "Fahrenheit") {
     
             }
         } 
-        elseif($unidadInicial == "F") {
-            if($unidadFinal == "C") {
+        elseif($unidadInicial == "Fahrenheit") {
+            if($unidadFinal == "Celsius") {
                 
             } 
-            elseif($unidadFinal == "K") {
+            elseif($unidadFinal == "Kelvin") {
     
             }
         }
-        echo "<p>$temperaturaFinal</p>";
+        return $temperaturaFinal;
     }
 ?>
