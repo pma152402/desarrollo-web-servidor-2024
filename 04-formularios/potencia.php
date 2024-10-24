@@ -45,7 +45,7 @@
 
         // BASE
         if ($tmp_base != ''){
-            if (is_numeric($tmp_base)){
+            if (filter_var($tmp_base, FILTER_VALIDATE_INT !== FALSE)){
                 $base = $tmp_base;
             }
             else {
@@ -58,7 +58,7 @@
 
         // EXPONENTE
         if ($tmp_exponente != ''){
-            if (is_numeric($tmp_exponente)){
+            if (filter_var($tmp_exponente, FILTER_VALIDATE_INT !== FALSE)){
                 if ($tmp_exponente >= 0){
                     $exponente = $tmp_exponente;
                 }
@@ -80,6 +80,10 @@
             echo "<h3>El resultado es $resultado</h3>";
         }
     } 
+    ?>
+
+    <?php
+
     ?>
 </body>
 </html>
