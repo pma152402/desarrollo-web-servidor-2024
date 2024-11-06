@@ -127,10 +127,97 @@
                 if (!in_array($tmp_tiene_liga, $respuestas_validas)){
                     $err_tiene_liga = "La respuesta indicada no es válida";
                 }
-
-                // ME HE QUEDADO AQUI
+                else {
+                    $tiene_liga = $tmp_tiene_liga;
+                }
             }
 
+            // VALIDAR FECHA DE FUNDACION
+            if ($tmp_fecha_fundacion == ""){
+                $err_fecha_fundacion = "La fecha de fundación no puede quedar vacío";
+            }
+            else {
+                $patron = "/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$/";           // IMPORTANTE
+                if (!preg_match($patron, $tmp_fecha_fundacion)){
+                    $err_fecha_fundacion = "Formato de fecha incorrecto";
+                }
+                else {
+                    // fecha minima
+                    $fecha_min = "1889-12-18";
+                    list($anno_min, $mes_min, $dia_min) = explode('-', $fecha_min);
+
+                    // fecha maxima
+                    $fecha_actual = date("Y-m-d");
+                    list($anno_actual, $mes_actual, $dia_actual) = explode('-', $fecha_actual);
+
+                    // fecha del club
+                    list($anno, $mes, $dia) = explode('-', $tmp_fecha_fundacion);
+
+                    // COMPARACIONES
+                    // por minimo
+                    if ($anno < $anno_min) {
+                        $err_fecha_fundacion = "La fecha de fundación no puede ser inferior a ".$dia_min."-".$mes_min."-".$anno_min;
+                    }
+                    elseif ($anno == $anno_min){
+                        if ($mes < $mes_min){
+                            $err_fecha_fundacion = "La fecha de fundación no puede ser inferior a ".$dia_min."-".$mes_min."-".$anno_min;
+                        }
+                        elseif ($mes > $mes_min){
+                            $fecha_fundacion = $tmp_fecha_fundacion;
+                        }
+                        elseif ($mes == $mes_min){
+                            if ($dia < $dia_min){
+                                $err_fecha_fundacion = "La fecha de fundación no puede ser inferior a ".$dia_min."-".$mes_min."-".$anno_min;
+                            }
+                            elseif ($dia >= $dia_min){
+                                $fecha_fundacion = $tmp_fecha_fundacion;
+                            }
+                        }
+                    }
+                    // por maximo
+                    elseif ($anno > $anno_actual){
+                        $err_fecha_fundacion = "La fecha de fundación no puede ser superior a ".$dia_actual."-".$mes_actual."-".$anno_actual;
+                    }
+                    elseif ($anno < $anno_actual){     
+                        $fecha_fundacion = $tmp_fecha_fundacion;
+                    }
+                    elseif ($anno == $anno_actual){
+                        if ($mes > $mes_actual){
+                            $err_fecha_fundacion = "La fecha de fundación no puede ser superior a ".$dia_actual."-".$mes_actual."-".$anno_actual;
+                        }
+                        elseif ($mes < $mes_actual){
+                            $fecha_fundacion = $tmp_fecha_fundacion;
+                        }
+                        elseif ($mes == $mes_actual){
+                            if ($dia > $dia_actual){
+                                $err_fecha_fundacion = "La fecha de fundación no puede ser superior a ".$dia_actual."-".$mes_actual."-".$anno_actual;
+                            }
+                            elseif ($dia <= $dia_actual){
+                                $fecha_fundacion = $tmp_fecha_fundacion;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // VALIDAR NUMERO DE JUGADORES
+            if ($tmp_numero_jugadores == ""){
+                $err_numero_jugadores = "El numero de jugadores no puede quedar vacío";
+            }
+            else {
+                // si no es un numero entero..
+                if (!filter_var($tmp_numero_jugadores, FILTER_VALIDATE_INT)){
+                    $err_numero_jugadores = "El valor solo puede ser numérico";
+                }
+                else {
+                    if ($tmp_numero_jugadores < 19 || $tmp_numero_jugadores > 32){
+                        $err_numero_jugadores = "El número total de jugadores debe de estar entre 19 y 32";
+                    }
+                    else {
+                        $numero_jugadores = $tmp_numero_jugadores;
+                    }
+                }
+            }
         }
     ?>
 
@@ -140,19 +227,19 @@
         <form class="col-4" action="" method="post">
             <!-- NOMBRE -->
             <div class="mb-3">
-                <label class="form-label"><i>Nombre:</i></label>
+                <label class="form-label"><i><b>Nombre:</b></i></label>
                 <input class="form-control" type="text" name="nombre">
                 <?php if (isset($err_nombre)) echo "<span class='error'>$err_nombre</span>" ?>
             </div>
             <!-- INICIALES -->
             <div class="mb-3">
-                <label class="form-label"><i>Iniciales:</i></label>
+                <label class="form-label"><i><b>Iniciales:</b></i></label>
                 <input class="form-control" type="text" name="iniciales">
                 <?php if (isset($err_iniciales)) echo "<span class='error'>$err_iniciales</span>" ?>
             </div>
             <!-- LIGA -->
             <div class="mb-3">
-                <label class="form-label"><i>Liga:</i></label>
+                <label class="form-label"><i><b>Liga:</b></i></label>
                 <select class="form-select" name="liga">
                     <option class="form-option" value="ea_sports">Liga EA Sports</option>
                     <option class="form-option" value="hypermotion">Liga Hypermotion</option>
@@ -162,26 +249,26 @@
             </div>
             <!-- CIUDAD -->
             <div class="mb-3">
-                <label class="form-label"><i>Ciudad:</i></label>
+                <label class="form-label"><i><b>Ciudad:</b></i></label>
                 <input class="form-control" type="text" name="ciudad">
                 <?php if (isset($err_ciudad)) echo "<span class='error'>$err_ciudad</span>" ?>
             </div>
-            <!-- TIENE TITULO? -->
+            <!-- TIENE LIGA? -->
             <div class="mb-3">
-                <label class="form-label"><i>Ha ganado alguna liga?:</i></label>
+                <label class="form-label"><i><b>Ha ganado alguna liga?:</b></i></label>
                 Si<input class="form-radio" type="radio" value="si" name="tiene_liga">
                 No<input class="form-radio" type="radio" value="no" name="tiene_liga" checked>
                 <?php if (isset($err_tiene_liga)) echo "<span class='error'>$err_tiene_liga</span>" ?>
             </div>
             <!-- FECHA DE FUNDACION -->
             <div class="mb-3">
-                <label class="form-label"><i>Fecha fundación:</i></label>
+                <label class="form-label"><i><b>Fecha fundación:</b></i></label>
                 <input class="form-date" type="date" name="fecha_fundacion">
                 <?php if (isset($err_fecha_fundacion)) echo "<span class='error'>$err_fecha_fundacion</span>" ?>
             </div>
             <!-- NUMERO DE JUGADORES -->
             <div class="mb-3">
-                <label class="form-label"><i>Numero de jugadores:</i></label>
+                <label class="form-label"><i><b>Número de jugadores:</b></i></label>
                 <input class="form-control" type="text" name="numero_jugadores">
                 <?php if (isset($err_numero_jugadores)) echo "<span class='error'>$err_numero_jugadores</span>" ?>
             </div>
@@ -190,6 +277,17 @@
                 <input class="btn btn-primary" type="submit" name="Enviar">
             </div>
         </form>
+        <?php
+            if (isset($nombre)&&isset($iniciales)&&isset($liga)&&isset($ciudad)&&isset($tiene_liga)
+            &&isset($fecha_fundacion)&&isset($numero_jugadores)){   ?>
+                <h2><?php echo $nombre ?></h2>
+                <h2><?php echo $iniciales ?></h2>
+                <h2><?php echo $liga ?></h2>
+                <h2><?php echo $ciudad ?></h2>
+                <h2><?php echo $tiene_liga ?></h2>
+                <h2><?php echo $fecha_fundacion ?></h2>
+                <h2><?php echo $numero_jugadores ?></h2>
+        <?php   }  ?>
     </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
