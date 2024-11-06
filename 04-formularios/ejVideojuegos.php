@@ -6,7 +6,7 @@ VIDEOJUEGOS
 - fecha de lanzamiento = el videojuego mas antiguo admisible sera del 1 de enero de 1947, y el mas
 en el futuro no podra dentro de mas de 5 años (dinamico)
 - pegi = 3,7,12,16,18 (select)
-- descripcion = 0-255 caracteres, cualquier caracter (campo opcional)
+- descripcion = 0-255 caracteres, cualquier caracter (campo opcional)       filter var PARA UN NUMERICO SI O SI
 -->
 
 <!DOCTYPE html>
@@ -91,14 +91,42 @@ en el futuro no podra dentro de mas de 5 años (dinamico)
     
                 list($anno,$mes,$dia) = explode('-',$tmp_fecha_lanzamiento);
 
-                if ($anno > ($anno_actual + 5)){
-                    $err_fecha_lanzamiento = "La fecha de lanzamiento no puede ser superior a ".$dia_actual."-".$mes_actual."-".($anno_actual + 5);
-                }
-                if ($anno < $annoMinimo){
+                // anio minimo 1947
+                if ($anno < $annoMinimo){   
                     $err_fecha_lanzamiento = "La fecha de lanzamiento no puede ser inferior a ".$diaMinimo."-".$mesMinimo."-".$annoMinimo;
                 }
-                else{
-                   // no hay mas cálculos porque en 5 años es la misma fecha 
+                // anio tope ahora mismo 2029
+                elseif ($anno > ($anno_actual + 5)){
+                    $err_fecha_lanzamiento = "OO La fecha de lanzamiento no puede ser superior a ".$dia_actual."-".$mes_actual."-".($anno_actual + 5);
+                }
+                // si es el mismo anio..
+                elseif ($anno == ($anno_actual + 5)){
+                    // si el mes es superior
+                    if ($mes > $mes_actual){
+                        $err_fecha_lanzamiento = "AA La fecha de lanzamiento no puede ser superior a ".$dia_actual."-".$mes_actual."-".($anno_actual + 5);
+                    }
+                    // si el mes es inferior es valido
+                    elseif ($mes < $mes_actual){
+                        $fecha_lanzamiento = $tmp_fecha_lanzamiento;
+                    }
+                    // si es el mismo mes..
+                    elseif ($mes == $mes_actual){
+                        // si el dia es superior
+                        if ($dia > $dia_actual){
+                            $err_fecha_lanzamiento = "JJ La fecha de lanzamiento no puede ser superior a ".$dia_actual."-".$mes_actual."-".($anno_actual + 5);
+                        }
+                        // si el dia es inferior
+                        elseif ($dia < $dia_actual){
+                            $fecha_lanzamiento = $tmp_fecha_lanzamiento;
+                        }
+                        // si es el mismo dia (vale)
+                        else{
+                            $fecha_lanzamiento = $tmp_fecha_lanzamiento;
+                        }
+                    }
+                }
+                // si el anio es inferior
+                else {
                     $fecha_lanzamiento = $tmp_fecha_lanzamiento;
                 }
             }
@@ -171,7 +199,7 @@ en el futuro no podra dentro de mas de 5 años (dinamico)
         </div>
         <!-- ENVIAR -->
         <div class="mb-3">
-            <input type="submit" value="Enviar">
+            <input class="btn btn-primary" type="submit" value="Enviar">
         </div>
     </form> 
     <?php 
