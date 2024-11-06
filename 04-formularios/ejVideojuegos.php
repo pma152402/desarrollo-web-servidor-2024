@@ -74,60 +74,74 @@ en el futuro no podra dentro de mas de 5 años (dinamico)
                 $err_plataforma = "La plataforma no puede quedar vacía.";
             }
             else{
-                $plataforma = $tmp_plataforma;
+                $consolas_validas = ["ps4", "ps5", "switch", "xbox", "pc"]; // HAY QUE ASEGURARSE POR SI CAMBIAN EL HTML
+                // si no esta en el array..
+                if (!in_array($tmp_plataforma, $consolas_validas)){ // IMPORTANTE
+                    $err_plataforma = "La consola no es válida";
+                }
+                else {
+                    $plataforma = $tmp_plataforma;
+                }
             }
 
             // FECHA
             if ($tmp_fecha_lanzamiento == ""){
                 $err_fecha_lanzamiento = "La fecha es un campo obligatorio";
             }
+            
             else{
-                $annoMinimo = 1947;
-                $mesMinimo = 1;
-                $diaMinimo = 1;
-                $fecha_actual = date("Y-m-d");
+                $patron = "/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$/";           // IMPORTANTE
+                if(!preg_match($patron, $tmp_fecha_lanzamiento)) {
+                    $err_fecha_lanzamiento = "Formato de fecha incorrecto";
+                } 
+                else {
+                    $annoMinimo = 1947;
+                    $mesMinimo = 1;
+                    $diaMinimo = 1;
+                    $fecha_actual = date("Y-m-d");
 
-                list($anno_actual,$mes_actual,$dia_actual) = explode('-',$fecha_actual);
-    
-                list($anno,$mes,$dia) = explode('-',$tmp_fecha_lanzamiento);
+                    list($anno_actual,$mes_actual,$dia_actual) = explode('-',$fecha_actual);
+        
+                    list($anno,$mes,$dia) = explode('-',$tmp_fecha_lanzamiento);
 
-                // anio minimo 1947
-                if ($anno < $annoMinimo){   
-                    $err_fecha_lanzamiento = "La fecha de lanzamiento no puede ser inferior a ".$diaMinimo."-".$mesMinimo."-".$annoMinimo;
-                }
-                // anio tope ahora mismo 2029
-                elseif ($anno > ($anno_actual + 5)){
-                    $err_fecha_lanzamiento = "OO La fecha de lanzamiento no puede ser superior a ".$dia_actual."-".$mes_actual."-".($anno_actual + 5);
-                }
-                // si es el mismo anio..
-                elseif ($anno == ($anno_actual + 5)){
-                    // si el mes es superior
-                    if ($mes > $mes_actual){
-                        $err_fecha_lanzamiento = "AA La fecha de lanzamiento no puede ser superior a ".$dia_actual."-".$mes_actual."-".($anno_actual + 5);
+                    // anio minimo 1947
+                    if ($anno < $annoMinimo){   
+                        $err_fecha_lanzamiento = "La fecha de lanzamiento no puede ser inferior a ".$diaMinimo."-".$mesMinimo."-".$annoMinimo;
                     }
-                    // si el mes es inferior es valido
-                    elseif ($mes < $mes_actual){
+                    // anio tope ahora mismo 2029
+                    elseif ($anno > ($anno_actual + 5)){
+                        $err_fecha_lanzamiento = "OO La fecha de lanzamiento no puede ser superior a ".$dia_actual."-".$mes_actual."-".($anno_actual + 5);
+                    }
+                    // si es el mismo anio (2029)..
+                    elseif ($anno == ($anno_actual + 5)){
+                        // si el mes es superior
+                        if ($mes > $mes_actual){
+                            $err_fecha_lanzamiento = "AA La fecha de lanzamiento no puede ser superior a ".$dia_actual."-".$mes_actual."-".($anno_actual + 5);
+                        }
+                        // si el mes es inferior es valido
+                        elseif ($mes < $mes_actual){
+                            $fecha_lanzamiento = $tmp_fecha_lanzamiento;
+                        }
+                        // si es el mismo mes..
+                        elseif ($mes == $mes_actual){
+                            // si el dia es superior
+                            if ($dia > $dia_actual){
+                                $err_fecha_lanzamiento = "JJ La fecha de lanzamiento no puede ser superior a ".$dia_actual."-".$mes_actual."-".($anno_actual + 5);
+                            }
+                            // si el dia es inferior
+                            elseif ($dia < $dia_actual){
+                                $fecha_lanzamiento = $tmp_fecha_lanzamiento;
+                            }
+                            // si es el mismo dia (vale)
+                            else{
+                                $fecha_lanzamiento = $tmp_fecha_lanzamiento;
+                            }
+                        }
+                    }
+                    // si el anio es inferior
+                    else {
                         $fecha_lanzamiento = $tmp_fecha_lanzamiento;
                     }
-                    // si es el mismo mes..
-                    elseif ($mes == $mes_actual){
-                        // si el dia es superior
-                        if ($dia > $dia_actual){
-                            $err_fecha_lanzamiento = "JJ La fecha de lanzamiento no puede ser superior a ".$dia_actual."-".$mes_actual."-".($anno_actual + 5);
-                        }
-                        // si el dia es inferior
-                        elseif ($dia < $dia_actual){
-                            $fecha_lanzamiento = $tmp_fecha_lanzamiento;
-                        }
-                        // si es el mismo dia (vale)
-                        else{
-                            $fecha_lanzamiento = $tmp_fecha_lanzamiento;
-                        }
-                    }
-                }
-                // si el anio es inferior
-                else {
-                    $fecha_lanzamiento = $tmp_fecha_lanzamiento;
                 }
             }
 
@@ -136,7 +150,14 @@ en el futuro no podra dentro de mas de 5 años (dinamico)
                 $err_pegi = "Debes seleccionar una opcion de PEGI";
             }
             else {
-                $pegi = $tmp_pegi;
+                $pegi_validos = ["3", "7", "12", "16", "18"];
+                // si no esta en el array..
+                if (!in_array($tmp_pegi, $pegi_validos)){
+                    $err_pegi = "El PEGI no es válido";
+                }
+                else{
+                    $pegi = $tmp_pegi;
+                }
             }
 
 
