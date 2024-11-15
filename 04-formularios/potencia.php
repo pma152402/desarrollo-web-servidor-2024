@@ -43,7 +43,7 @@
         $tmp_base = $_POST["base"];     // tmp_  variable temporal
         $tmp_exponente = $_POST["elevado"];
 
-        // BASE
+        // BASE de la potencia
         if ($tmp_base != ''){
             if (filter_var($tmp_base, FILTER_VALIDATE_INT !== FALSE)){
                 $base = $tmp_base;
@@ -56,7 +56,7 @@
             echo "<p>La base es un campo obligatorio</p>";
         }
 
-        // EXPONENTE
+        // EXPONENTE de la potencia
         if ($tmp_exponente != ''){
             if (filter_var($tmp_exponente, FILTER_VALIDATE_INT !== FALSE)){
                 if ($tmp_exponente >= 0){
