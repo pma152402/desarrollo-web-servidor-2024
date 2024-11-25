@@ -22,6 +22,8 @@
 
             $sql = "INSERT INTO usuarios VALUES ('$usuario', '$contrasena_cifrada')";
             $_conexion -> query($sql);
+
+            header("location: iniciar_sesion.php");
         }
     ?>
 
@@ -39,7 +41,7 @@
             </div>
             <div class="mb-3">
                 <input class="btn btn-primary" type="submit" value="Registrarse">
-                <a class="btn btn-secondary" href="../index.php">Volver</a>
+                <a class="btn btn-secondary" href="iniciar_sesion.php">Iniciar sesión</a>
             </div>
         </form>
     </div>

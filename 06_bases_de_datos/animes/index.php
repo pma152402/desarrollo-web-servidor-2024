@@ -23,7 +23,9 @@
     ?>
 </head>
 <body>
+<a class="btn btn-warning" href="usuario/cerrar_sesion.php">Cerrar sesión</a>
     <div class="container">
+        
         <h1>Tabla de animes</h1>
         <?php
             if($_SERVER["REQUEST_METHOD"] == "POST") {

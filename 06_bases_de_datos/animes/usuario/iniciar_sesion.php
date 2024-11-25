@@ -40,6 +40,8 @@
                     session_start();
                     $_SESSION["usuario"] = "usuario";
                     //$_COOKIE["loquesea"] = "loquesea"     en el cliente
+                    header("location: ../index.php");
+                    exit;
                 }
                 else {
                     echo "<h2>La contraseña es incorrecta</h2>";
@@ -63,6 +65,7 @@
             <div class="mb-3">
                 <input class="btn btn-primary" type="submit" value="Iniciar sesión">
                 <a class="btn btn-secondary" href="../index.php">Volver</a>
+                <a class="btn btn-secondary" href="registro.php">Registrarse</a>
             </div>
         </form>
     </div>
