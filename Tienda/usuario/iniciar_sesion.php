@@ -11,6 +11,11 @@
 
         require('../util/conexion.php');
     ?>
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
 </head>
 <body>
     <?php
@@ -20,31 +25,21 @@
 
             $sql = "SELECT * FROM usuarios WHERE usuario = '$usuario'";
             $resultado = $_conexion -> query($sql); 
-            //var_dump($resultado);
 
             if ($resultado -> num_rows == 0){
-                echo "<h2>El usuario $usuario no existe</h2>";
+                $err_usuario = "El usuario $usuario no existe";
             }
             else {
                 $datos_usuario = $resultado -> fetch_assoc();
-                /*
-                    Podemos acceder a:
-
-                    $datos_usuario["usuario"];
-                    $datos_usuario["contrasena];
-                */
                 $acceso_concedido = password_verify($contrasena, $datos_usuario["contrasena"]);
-                //var_dump($acceso_concedido);
+                
                 if ($acceso_concedido){
-                    // todo guay
                     session_start();
-                    $_SESSION["usuario"] = "usuario";
-                    //$_COOKIE["loquesea"] = "loquesea"     en el cliente
+                    $_SESSION["usuario"] = $usuario;
                     header("location: ../index.php");
-                    exit;
                 }
                 else {
-                    echo "<h2>La contraseña es incorrecta</h2>";
+                    $err_contrasena = "La contraseña es incorrecta";
                 }
             }
         }
@@ -52,15 +47,16 @@
 
     <div class="container">
         <h1>Iniciar sesión</h1>
-       
         <form class="col-6" action="" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label">Usuario</label>
                 <input class="form-control" type="text" name="usuario">
+                <?php if(isset($err_usuario)) echo "<span class='error'>$err_usuario</span>"; ?>
             </div>
             <div class="mb-3">
                 <label class="form-label">Contraseña</label>
                 <input class="form-control" type="password" name="contrasena">
+                <?php if(isset($err_contrasena)) echo "<span class='error'>$err_contrasena</span>" ?>
             </div>
             <div class="mb-3">
                 <input class="btn btn-primary" type="submit" value="Iniciar sesión">

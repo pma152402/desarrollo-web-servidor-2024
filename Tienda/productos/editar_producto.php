@@ -15,7 +15,6 @@
         session_start();
         if (isset($_SESSION["usuario"])){
             echo "<h2>Bienvenid@" . $_SESSION["usuario"] . "</h2>";
-            //exit;
         } 
         else {
             header("location: ../index.php");
@@ -122,7 +121,6 @@
                     if (strlen($tmp_categoria) > 30) {
                         $err_categoria = "La categoría solo puede tener hasta 30 carácteres";
                     }
-
                     if (!in_array($tmp_categoria, $categorias)) {
                         $err_categoria = "La categoría seleccionada es inválida";
                     } else {
@@ -144,12 +142,12 @@
                 }
 
                 /* VALIDAR STOCK */
-                if ($tmp_stock = ""){
-                    $stock = intval($tmp_stock);
+                if ($tmp_stock == ""){
+                    $stock = 0;
                 }
                 else {
-                    if (!is_numeric($tmp_stock)) {
-                        $err_stock = "El stock debe ser un número";
+                    if (filter_var($tmp_stock, FILTER_VALIDATE_INT) === false) {
+                        $err_stock = "El stock debe de ser un número entero";
                     } 
                     else {
                         if ($tmp_stock < 0 || $tmp_stock > 2147483647) {
@@ -194,6 +192,7 @@
             <div class="mb-3">
                 <label class="form-label">Categoría:</label>
                 <select class="form-select" name="categoria">
+                <option value="" selected disabled hidden>--Selecionar categoría--</option>
                     <?php
                         foreach ($categorias as $categoria) { ?>
                             <option value="<?php echo $categoria ?>">
@@ -214,14 +213,14 @@
             <!-- STOCK -->
             <div class="mb-3">
                 <label class="form-label">Stock:</label>
-                <input class="form-control" type="text" name="stock" value="<?php echo $stock ?>">
+                <input class="form-control" type="text" name="stock">
                 <?php if(isset($err_stock)) echo "<span class='error'>$err_stock</span>" ?>
             </div>
 
             <!-- ENVIAR -->
             <div class="mb-3">
                 <input class="btn btn-primary" type="submit" name="Enviar">
-                <input type="hidden" name="categoria" value="<?php echo $id_producto ?>">
+                <input type="hidden" name="id_producto" value="<?php echo $id_producto ?>">
 
                 <!-- VOLVER -->
                 <a class="btn btn-secondary" href="./index.php">Volver</a>
@@ -231,11 +230,11 @@
     </div>
     <!-- INSERTAR EN LA BASE DE DATOS -->
     <?php
-        if (isset($nombre) && isset($precio) && isset($categoria) && isset($stock) && isset($descripcion)) {
+        if (isset($nombre) && isset($precio) && isset($categoria_nueva) && isset($stock) && isset($descripcion)) {
             $update = "UPDATE productos SET
                 nombre = '$nombre',
                 precio = '$precio',
-                categoria = '$categoria',
+                categoria = '$categoria_nueva',
                 stock = '$stock',
                 descripcion = '$descripcion'
                 WHERE id_producto = '$id_producto' ";
@@ -245,5 +244,3 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
-
-<!-- FALLO: Una vez cambiada la categoria, no se puede volver a cambiar, no reconoce las categorias del array

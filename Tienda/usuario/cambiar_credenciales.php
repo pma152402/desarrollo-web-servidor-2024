@@ -15,7 +15,6 @@
         session_start();
         if (isset($_SESSION["usuario"])){
             echo "<h2>Bienvenid@" . $_SESSION["usuario"] . "</h2>";
-            //exit;
         } 
         else {
             header("location: ../index.php");
@@ -34,9 +33,7 @@
         $usuario = $_SESSION["usuario"];
         
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $tmp_actual = $_POST["actual"];
-            $tmp_nueva = $_POST["nueva"];
-            $tmp_confirmar = $_POST["confirmar"];
+            $tmp_contrasena = $_POST["contrasena"];
 
             $sql = "SELECT * FROM usuarios WHERE usuario = '$usuario'";
             $resultado = $_conexion -> query($sql);
@@ -46,35 +43,21 @@
             }
 
 
-            $comparar = password_verify($tmp_actual, $contrasena);
-            if (!$comparar) {
-                $err_actual = "La contraseña no es correcta.";
-            } 
+            // CONTRASEÑA
+            if (strlen($tmp_contrasena) < 8 || strlen($tmp_contrasena) > 15){
+                $err_contrasena = "La contraseña debe de tener entre 3 y 15 carácteres";
+            }
             else {
-                if ($tmp_nueva == "" || $tmp_confirmar == "") {
-                    $err_nueva = "No puede haber campos vacíos.";
-                } 
+                $patron = "/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/";  
+                if (!preg_match($patron, $tmp_contrasena)){
+                    $err_contrasena = "La contraseña debe de tener mayúsculas, minúsculas y números.";
+                }
                 else {
-                    if ($tmp_nueva !== $tmp_confirmar) {
-                        $err_nueva = "Las contraseñas no coinciden.";
-                    } 
-                    else {
-                        if (strlen($tmp_nueva) < 8 || strlen($tmp_nueva) > 15) {
-                            $err_nueva = "La contraseña debe tener entre 8 y 15 caracteres.";
-                        } 
-                        else {
-                            $patron = "/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/";
-                            if (!preg_match($patron, $tmp_nueva)) {
-                                $err_nueva = "La contraseña debe contener como minimo una mayuscula, números y letras.";
-                            } 
-                            else {
-                                $contrasena_cifrada = password_hash($tmp_nueva,PASSWORD_DEFAULT);
-                            }
-                        }
-                    }
+                    $contrasena_cifrada = password_hash($tmp_contrasena, PASSWORD_DEFAULT);
                 }
             }
-        }
+            }
+        
     ?>
         <a class="btn btn-info" href="../index.php">Inicio</a>
           
@@ -85,36 +68,16 @@
         <form class="col-4" action="" method="post" enctype="multipart/form-data">
 
             <div class="mb-3">
-                <input class="form-control" type="text" name="usuario" value="<?php echo "$usuario" ?>" disabled>
                 <label class="form-label">Usuario</label>
+                <input class="form-control" type="text" name="usuario" value="<?php echo "$usuario" ?>" disabled>
             </div>
 
             <div class="mb-3">
-                <input class="form-control" type="password" name="actual">
-                <label class="form-label">Contraseña actual</label>
-                <?php
-                    if(isset($err_actual)){
-                        echo "<span class='error'>$err_actual</span>";
-                    }
-                ?>
+            <label class="form-label">Contraseña nueva</label>
+                <input class="form-control" type="password" name="contrasena">
+                <?php if(isset($err_contrasena)) echo "<span class='error'>$err_contrasena</span>" ?>
             </div>
             <br>
-
-            <div class="mb-3">
-                <input class="form-control" type="password" name="nueva">
-                <label class="form-label">Nueva contraseña</label>
-            </div>
-
-            <div class="mb-3">
-                <input class="form-control" type="password" name="confirmar">
-                <label class="form-label">Confirmar contraseña</label>
-                <?php 
-                    if(isset($err_nueva)){
-                        echo "<span class='error'>$err_nueva</span>";
-                    }
-                ?>
-            </div>
-
             <div class="custom-button-group">
                 <input type="hidden" name="usuario" value="<?php echo $usuario ?>">
                 <input class="btn btn-success" type="submit" value="Guardar">

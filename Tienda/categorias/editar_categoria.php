@@ -14,7 +14,7 @@
         // Si al comenzar la sesión no se encuentra al usuario..
         session_start();
         if (isset($_SESSION["usuario"])){
-            echo "<h2>Bienvenid@" . $_SESSION["usuario"] . "</h2>";
+            echo "<h2>Bienvenid@ " . $_SESSION["usuario"] . "</h2>";
         } 
         else {
             header("location: ../index.php");

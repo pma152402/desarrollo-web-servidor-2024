@@ -14,7 +14,7 @@
         // Si al comenzar la sesión no se encuentra al usuario..
         session_start();
         if (isset($_SESSION["usuario"])){
-            echo "<h2>Bienvenid@" . $_SESSION["usuario"] . "</h2>";
+            echo "<h2>Bienvenid@ " . $_SESSION["usuario"] . "</h2>";
         } 
         else {
             header("location: ../index.php");
@@ -68,7 +68,7 @@
                             $sql = "SELECT * FROM categorias WHERE categoria = '$tmp_categoria'";
                             $resultado = $_conexion -> query($sql);
                             if ($resultado -> num_rows == 1) {
-                                $err_categoria = "La categoría indicada ya existe"; // ? QUE NO ERROR PHP
+                                $err_categoria = "La categoría indicada ya existe"; 
                             } 
                             else {
                                 $categoria = $tmp_categoria;

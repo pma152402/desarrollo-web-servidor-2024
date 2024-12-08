@@ -46,12 +46,27 @@
     <div class="container">
         <h1>Nuevo producto</h1>
         <?php
+
+            // sacamos todas las categorías
+            $sql = "SELECT * FROM categorias ORDER BY categoria";
+            $resultado = $_conexion -> query($sql);
+            $categorias = [];
+
+            while ($fila = $resultado -> fetch_assoc()) {
+                array_push($categorias, $fila["categoria"]);
+            }
+
             if($_SERVER["REQUEST_METHOD"] == "POST") {
                 $tmp_nombre = depurar($_POST["nombre"]);
                 $tmp_precio = depurar($_POST["precio"]);
-                $tmp_categoria = depurar($_POST["categoria"]);
+                if (isset($_POST["categoria"])){
+                    $tmp_categoria = depurar($_POST["categoria"]);
+                }
+                
                 $tmp_stock = depurar($_POST["stock"]);
                 $tmp_descripcion = depurar($_POST["descripcion"]);
+
+                
 
                 /* VALIDAR NOMBRE */
                 if ($tmp_nombre == "") {
@@ -95,19 +110,18 @@
                     $err_categoria = "La categoría es un campo obligatorio";
                 } 
                 else {
-                    // sacamos todas las categorías
-                    $sql = "SELECT * FROM categorias";
-                    $resultado = $_conexion -> query($sql);
-                    $categorias = [];
-
-                    while ($fila = $resultado -> fetch_assoc()) {
-                        $categorias[] = $fila['categoria'];
+                    if (strlen($tmp_categoria) > 30) {
+                        $err_categoria = "La categoría solo puede tener hasta 30 carácteres";
                     }
+                    else {
+                        
+                        //
 
-                    if (!in_array($tmp_categoria, $categorias)) {
-                        $err_categoria = "La categoría seleccionada es inválida";
-                    } else {
-                        $categoria = $tmp_categoria;
+                        if (!in_array($tmp_categoria, $categorias)) {
+                            $err_categoria = "La categoría seleccionada es inválida";
+                        } else {
+                            $categoria = $tmp_categoria;
+                        }
                     }
                 }
 
@@ -124,23 +138,26 @@
                     }
                 }
 
-                /* VALIDAR STOCK */
+                /* VALIDAR STOCK */ 
                 if ($tmp_stock == ""){
-                    $stock = intval($tmp_stock);
+                    $stock = 0;
                 }
-                if (!is_numeric($tmp_stock)) {
-                    $err_stock = "El stock debe ser un número";
-                } 
                 else {
-                    if ($tmp_stock < 0 || $tmp_stock > 2147483647) {
-                        $err_stock = "El stock debe estar entre 0 y 2147483647";
+                    if (filter_var($tmp_stock, FILTER_VALIDATE_INT) === false) {
+                        $err_stock = "El stock debe de ser un número entero";
                     } 
                     else {
-                        $stock = $tmp_stock;
+                        if ($tmp_stock < 0 || $tmp_stock > 2147483647) {
+                            $err_stock = "El stock debe de estar entre 0 y 2147483647";
+                        } 
+                        else {
+                            $stock = $tmp_stock;
+                        }
                     }
                 }
+                
 
-                /* VALIDAR IMAGENES */
+                /* VALIDAR IMAGENES */   
                 $nombre_img = $_FILES["imagen"]["name"];
                 $ubicacion_tmp = $_FILES["imagen"]["tmp_name"];
                 $tipo_img = $_FILES["imagen"]["type"];
@@ -160,15 +177,14 @@
                 }
             }
 
-        /* SACAMOS Y ORDENAMOS LAS CATEGORIAS */
-        $sql = "SELECT * FROM categorias ORDER BY categoria";
-        $resultado = $_conexion -> query($sql);
-        $categorias = [];
+            if (isset($nombre) && isset($precio) && isset($categoria) && isset($stock) && isset($ubicacion_final) && isset($descripcion)) {
+                $enviar = "INSERT INTO productos (nombre, precio, categoria, stock, imagen, descripcion) 
+                    VALUES ('$nombre', '$precio', '$categoria', '$stock', '$ubicacion_final', '$descripcion')";
+                $_conexion -> query($enviar);
+            }
 
-        while ($fila = $resultado -> fetch_assoc()) {
-            array_push($categorias, $fila["categoria"]);
-        }
         ?>
+
 
         <!-- FORMULARIO -->
         <form class="col-4" action="" method="post" enctype="multipart/form-data">
@@ -187,10 +203,11 @@
                 <?php if(isset($err_precio)) echo "<span class='error'>$err_precio</span>" ?>
             </div>
 
-            <!-- CATEGORIAS ????????-->
+            <!-- CATEGORIAS -->
             <div class="mb-3">
                 <label class="form-label">Categoría:</label>
                 <select class="form-select" name="categoria">
+                <option value="" selected disabled hidden>--Selecionar categoría--</option>
                     <?php
                         foreach ($categorias as $categoria) { ?>
                             <option value="<?php echo $categoria ?>">
@@ -229,15 +246,6 @@
             </div>
         </form>
     </div>
-
-    <!-- INSERTAR EN LA BASE DE DATOS -->
-    <?php
-        if (isset($nombre) && isset($precio) && isset($categoria) && isset($ubicacion_final) && isset($descripcion)) {
-            $enviar = "INSERT INTO productos (nombre, precio, categoria, stock, imagen, descripcion) 
-                VALUES ('$nombre', '$precio', '$categoria', '$stock', '$ubicacion_final', '$descripcion')";
-            $_conexion -> query($enviar);
-        }
-    ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

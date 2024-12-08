@@ -14,7 +14,7 @@
         // Si al comenzar la sesión no se encuentra al usuario..
         session_start();
         if (isset($_SESSION["usuario"])){
-            echo "<h2>Bienvenid@" . $_SESSION["usuario"] . "</h2>";
+            echo "<h2>Bienvenid@ " . $_SESSION["usuario"] . "</h2>";
             echo "<a class='btn btn-warning' href='../usuario/cerrar_sesion.php'>Cerrar sesión</a>";
         } 
         else {
@@ -64,14 +64,13 @@
                     echo "<td>" . $fila["precio"] . "</td>";
                     echo "<td>" . $fila["categoria"] . "</td>";
                     echo "<td>" . $fila["stock"] . "</td>";
-                    ?>
-                    <td> <img src="<?php echo $fila["imagen"] ?>" alt=""> </td>
+                    ?> 
+                    <td>
+                        <img style="height: 200px; width: 200px" src="<?php echo ($fila["imagen"]) ?>" alt="Sin imagen">
+                    </td>
                     <?php
                     echo "<td>" . $fila["descripcion"] . "</td>";
-            ?>
-                    <td>
-                        <img src="<?php echo $fila["imagen"] ?>" alt="">
-                    </td>
+                    ?>
                     <td>
                         <a class="btn btn-primary" href="editar_producto.php?id_producto=<?php echo $fila["id_producto"] ?>">Editar</a>
                     </td>

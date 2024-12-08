@@ -8,24 +8,24 @@
     <?php
         error_reporting( E_ALL );
         ini_set("display_errors", 1);
-     
+
         require("../util/conexion.php");
 
         // Si al comenzar la sesión no se encuentra al usuario..
         session_start();
-        if ($_SESSION["usuario"] == "cipote2000"){
-            echo "<p>Bienvenid@ " . $_SESSION["usuario"] . "</p>";
+        if (isset($_SESSION["usuario"])){
+            echo "<h2>Bienvenid@ " . $_SESSION["usuario"] . "</h2>";
             echo "<a class='btn btn-warning' href='../usuario/cerrar_sesion.php'>Cerrar sesión</a>";
-
-            echo "<pre>";
-            print_r($_SESSION);
-            echo "</pre>";
-
         } 
         else {
             header("location: ../index.php");   
         }
     ?>
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
 </head>
 <body>
     <a class="btn btn-success" href="../index.php">Inicio</a>
@@ -38,8 +38,19 @@
                 $categoria = $_POST["categoria"];
 
                 $nombre_categoria = $_POST["categoria"];
-                $sql = "DELETE FROM categorias WHERE categoria = '$nombre_categoria'";
-                $_conexion -> query($sql);
+
+                // Si hay productos asociados no se podra borrar
+                $productos = "SELECT * FROM productos WHERE categoria = '$nombre_categoria'";
+                $resultado = $_conexion -> query($productos);
+    
+                if ($resultado -> num_rows >= 1) {
+                    echo "<p class='error'> No es posible borrar la categoría $nombre_categoria 
+                    porque tiene productos asociados. </p>";
+                } 
+                else {
+                    $sql = "DELETE FROM categorias WHERE categoria = '$nombre_categoria'";
+                    $_conexion -> query($sql);
+                }
 
                 // obtener categorias
                 $sql = "SELECT * FROM categorias";
